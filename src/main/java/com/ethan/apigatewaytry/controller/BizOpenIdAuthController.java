@@ -25,7 +25,7 @@ public class BizOpenIdAuthController {
     private static final Logger logger = getLogger(BizOpenIdAuthController.class);
 
     @RequestMapping(value = "api/sum.json", method = RequestMethod.POST)
-    public ResponseE~ntity sum(@RequestBody SumReqBody sumReqBody,
+    public ResponseEntity sum(@RequestBody SumReqBody sumReqBody,
                               HttpServletRequest req,
                               HttpServletResponse res) {
         logger.info("------ controller start");
@@ -37,8 +37,8 @@ public class BizOpenIdAuthController {
             detail.put("sum", sumReqBody.getA() + sumReqBody.getB());
             return buildResponseEntity(new ResResult("SUCCESS", detail));
         } else {
-            return buildResponseEntity(HttpStatus.BAD_REQUEST
-                    , new ResResult("PARAM_ERROR", "需要参数a和b，都为数字"));
+            return buildResponseEntity(HttpStatus.BAD_REQUEST,
+                    new ResResult("PARAM_ERROR", "需要参数a和b，都为数字"));
         }
     }
 
