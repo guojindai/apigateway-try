@@ -32,7 +32,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
     private static final String CA_PROXY_SIGN = "X-Ca-Proxy-Signature";
     private static final String CA_PROXY_SIGN_SECRET_KEY = "X-Ca-Proxy-Signature-Secret-Key";
     private static final String CA_PROXY_SIGN_HEADERS = "X-Ca-Proxy-Signature-Headers";
-    private static final boolean HTTP_HEADER_TO_LOWER_CASE = false;
+    private static final boolean HTTP_HEADER_TO_LOWER_CASE = true;
     private static final String HTTP_METHOD_POST = "post";
     private static final String HTTP_METHOD_PUT = "put";
     private static final Map<String, String> signSecretMap = new HashMap<>();
