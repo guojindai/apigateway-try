@@ -52,7 +52,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
         String gatewaySign = httpServletRequest.getHeader(HTTP_HEADER_TO_LOWER_CASE
                 ? CA_PROXY_SIGN.toLowerCase() : CA_PROXY_SIGN);
         logger.info("uri: {}", uri);
-        logger.info("CA_PROXY_SIGN_SECRET_KEY: {}", httpServletRequest.getHeader(CA_PROXY_SIGN_SECRET_KEY));
+        logger.info("CA_PROXY_SIGN_HEADERS: {}", httpServletRequest.getHeader(CA_PROXY_SIGN_HEADERS));
         logger.info("headerMap: {}", headerMap);
         logger.info("paramMap: {}", paramMap);
         logger.info("API网关签名: {}", gatewaySign);
