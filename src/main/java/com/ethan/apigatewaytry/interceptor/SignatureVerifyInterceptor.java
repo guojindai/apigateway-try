@@ -32,6 +32,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
     private static final String CA_PROXY_SIGN = "X-Ca-Proxy-Signature";
     private static final String CA_PROXY_SIGN_SECRET_KEY = "X-Ca-Proxy-Signature-Secret-Key";
     private static final String CA_PROXY_SIGN_HEADERS = "X-Ca-Proxy-Signature-Headers";
+    private static final String CA_PROXY_SIGN_STRING_TO_SIGN = "X-Ca-Proxy-Signature-String-To-Sign";
     private static final boolean HTTP_HEADER_TO_LOWER_CASE = false;
     private static final String HTTP_METHOD_POST = "post";
     private static final String HTTP_METHOD_PUT = "put";
@@ -52,10 +53,11 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
         String gatewaySign = httpServletRequest.getHeader(HTTP_HEADER_TO_LOWER_CASE
                 ? CA_PROXY_SIGN.toLowerCase() : CA_PROXY_SIGN);
         logger.info("uri: {}", uri);
+        logger.info("CA_PROXY_SIGN_STRING_TO_SIGN: {}",  httpServletRequest.getHeader(CA_PROXY_SIGN_STRING_TO_SIGN));
+        logger.info("API网关签名: {}", gatewaySign);
         logger.info("CA_PROXY_SIGN_HEADERS: {}", httpServletRequest.getHeader(CA_PROXY_SIGN_HEADERS));
         logger.info("headerMap: {}", headerMap);
         logger.info("paramMap: {}", paramMap);
-        logger.info("API网关签名: {}", gatewaySign);
         try {
             String serviceSign = serviceSign(uri, httpMethod, headerMap, paramMap, inputStreamBytes);
             logger.info("服务端签名: {}", serviceSign);
