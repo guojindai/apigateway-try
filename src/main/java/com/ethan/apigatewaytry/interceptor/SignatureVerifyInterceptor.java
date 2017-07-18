@@ -48,10 +48,11 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
         String httpMethod = httpServletRequest.getMethod();
         Map<String, String> headerMap = createHeaderMap(httpServletRequest);
         Map<String, Object> paramMap = createParamMap(httpServletRequest);
-        byte[] inputStreamBytes = new byte[]{};
+        byte[] inputStreamBytes = IOUtils.toByteArray(httpServletRequest.getInputStream());
         String gatewaySign = httpServletRequest.getHeader(HTTP_HEADER_TO_LOWER_CASE
                 ? CA_PROXY_SIGN.toLowerCase() : CA_PROXY_SIGN);
         logger.info("uri: {}", uri);
+        logger.info("CA_PROXY_SIGN_SECRET_KEY: {}", httpServletRequest.getHeader(CA_PROXY_SIGN_SECRET_KEY));
         logger.info("headerMap: {}", headerMap);
         logger.info("paramMap: {}", paramMap);
         logger.info("API网关签名: {}", gatewaySign);
@@ -62,6 +63,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
                 throw new RuntimeException("InvalidSignature");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
             httpServletResponse.getWriter().write(e.getMessage());
             return false;
