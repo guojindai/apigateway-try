@@ -70,10 +70,12 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
 
     private Map<String, String> createHeaderMap(HttpServletRequest httpServletRequest) {
         Map<String, String> headerMap = new HashMap<>();
-        Enumeration<String> headers = httpServletRequest.getHeaderNames();
-        while (headers.hasMoreElements()) {
-            String name = headers.nextElement();
-            headerMap.put(name, httpServletRequest.getHeader(name));
+        String headerNamesString = httpServletRequest.getHeader(HTTP_HEADER_TO_LOWER_CASE
+                ? CA_PROXY_SIGN_HEADERS.toLowerCase() : CA_PROXY_SIGN_HEADERS);
+        if (!Strings.isNullOrEmpty(headerNamesString)) {
+            for (String name: headerNamesString.split(",")) {
+                headerMap.put(name, httpServletRequest.getHeader(name));
+            }
         }
         return headerMap;
     }
