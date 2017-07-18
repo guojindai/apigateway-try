@@ -49,7 +49,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
         Map<String, String> headerMap = createHeaderMap(httpServletRequest);
         Map<String, Object> paramMap = createParamMap(httpServletRequest);
         byte[] inputStreamBytes = new byte[]{};
-        String gatewaySign = headerMap.get(CA_PROXY_SIGN);
+        String gatewaySign = headerMap.get(HTTP_HEADER_TO_LOWER_CASE ? CA_PROXY_SIGN.toLowerCase() : CA_PROXY_SIGN);
         logger.info("uri: ", uri);
         logger.info("headerMap: {}", headerMap);
         logger.info("paramMap: {}", paramMap);
@@ -97,6 +97,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
         String bodyMd5 = buildBodyMd5(httpMethod, inputStreamBytes);
         String resourceToSign = buildResource(uri, paramsMap);
         String stringToSign = buildStringToSign(headersToSign, resourceToSign, httpMethod, bodyMd5);
+        logger.info("stringToSign: {}", stringToSign);
         Mac hmacSha256 = Mac.getInstance(Constants.HMAC_SHA256);
         String secret = signSecretMap.get(headers.get(HTTP_HEADER_TO_LOWER_CASE
                 ? CA_PROXY_SIGN_SECRET_KEY.toLowerCase() : CA_PROXY_SIGN_SECRET_KEY));
