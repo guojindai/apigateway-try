@@ -71,6 +71,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
             httpServletResponse.getWriter().write(e.getMessage());
             return false;
         }
+        httpServletRequest.setAttribute("bodyBytes", inputStreamBytes);
         return true;
     }
 
