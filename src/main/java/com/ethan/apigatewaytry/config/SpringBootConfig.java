@@ -15,7 +15,7 @@ public class SpringBootConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
-        registry.addInterceptor(signatureVerifyInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(signatureVerifyInterceptor).addPathPatterns("/**/*.json");
     }
 
 }
