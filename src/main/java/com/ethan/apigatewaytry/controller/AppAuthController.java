@@ -19,10 +19,10 @@ import java.util.Map;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping("openidauth")
-public class BizOpenIdAuthController {
+@RequestMapping("appauth")
+public class AppAuthController {
 
-    private static final Logger logger = getLogger(BizOpenIdAuthController.class);
+    private static final Logger logger = getLogger(AppAuthController.class);
 
     @RequestMapping(value = "api/sum.json", method = RequestMethod.POST)
     public ResponseEntity sum(@RequestBody SumReqBody sumReqBody,
