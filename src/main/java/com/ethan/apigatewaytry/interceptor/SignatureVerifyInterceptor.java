@@ -58,6 +58,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
         logger.info("CA_PROXY_SIGN_HEADERS: {}", httpServletRequest.getHeader(CA_PROXY_SIGN_HEADERS));
         logger.info("headerMap: {}", headerMap);
         logger.info("paramMap: {}", paramMap);
+        logger.info("inputStreamBytes size: {}", inputStreamBytes.length);
         try {
             String serviceSign = serviceSign(uri, httpMethod, headerMap, paramMap, inputStreamBytes);
             logger.info("服务端签名: {}", serviceSign);
