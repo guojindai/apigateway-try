@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -56,11 +56,11 @@ public class AppAuthController {
     }
 
     @RequestMapping(value = "api/file.json", method = RequestMethod.POST)
-    public ResponseEntity file(@RequestParam MultipartFile file,
+    public ResponseEntity file(@RequestParam("file") MultipartFile file,
                                @RequestParam String fileName) throws IOException {
         String filePath = tmpDir + "/" + fileName;
         logger.info("filePath: {}", filePath);
-        IOUtils.copy(file.getInputStream(), new FileWriter(filePath));
+        file.transferTo(new File(filePath));
         return buildResponseEntity(new ResResult("SUCCESS", null));
     }
 
