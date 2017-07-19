@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +28,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class AppAuthController {
 
     private static final Logger logger = getLogger(AppAuthController.class);
-    private static String tmpDir = null;
+    private static String tmpDir;
 
     @PostConstruct
     public void postConstruct() {
@@ -38,7 +37,7 @@ public class AppAuthController {
     }
 
     @RequestMapping(value = "api/sum.json", method = RequestMethod.POST)
-    public ResponseEntity sum(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException {
+    public ResponseEntity sum(HttpServletRequest req) throws UnsupportedEncodingException {
         logger.info("------ controller start");
         logger.info("req url: {}, query: {}", req.getRequestURL(), req.getQueryString());
         printReqHeaders(req);
@@ -56,12 +55,13 @@ public class AppAuthController {
         }
     }
 
-    @RequestMapping(value = "api/file.json", method = RequestMethod.POST.POST)
+    @RequestMapping(value = "api/file.json", method = RequestMethod.POST)
     public ResponseEntity file(@RequestParam MultipartFile file,
                                @RequestParam String fileName) throws IOException {
         String filePath = tmpDir + "/" + fileName;
         logger.info("filePath: {}", filePath);
         IOUtils.copy(file.getInputStream(), new FileWriter(filePath));
+        return buildResponseEntity(new ResResult("SUCCESS", null));
     }
 
     private ResponseEntity buildResponseEntity(Object body) {
@@ -75,7 +75,7 @@ public class AppAuthController {
 
     private void printReqHeaders(HttpServletRequest req) {
         Enumeration<String> names = req.getHeaderNames();
-        String name = null;
+        String name;
         logger.info("req headers:");
         while (names.hasMoreElements()) {
             name = names.nextElement();
