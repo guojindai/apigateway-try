@@ -2,17 +2,21 @@ package com.ethan.apigatewaytry.controller;
 
 import com.ethan.apigatewaytry.dto.ResResult;
 import com.ethan.apigatewaytry.dto.SumReqBody;
+import com.google.common.io.Files;
 import com.google.gson.Gson;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,6 +29,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class AppAuthController {
 
     private static final Logger logger = getLogger(AppAuthController.class);
+    private static String tmpDir = null;
+
+    @PostConstruct
+    public void postConstruct() {
+        tmpDir = Files.createTempDir().getAbsolutePath();
+        logger.info("file path: {}", tmpDir);
+    }
 
     @RequestMapping(value = "api/sum.json", method = RequestMethod.POST)
     public ResponseEntity sum(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException {
@@ -43,6 +54,14 @@ public class AppAuthController {
             return buildResponseEntity(HttpStatus.BAD_REQUEST,
                     new ResResult("PARAM_ERROR", "需要参数a和b，都为数字"));
         }
+    }
+
+    @RequestMapping(value = "api/file.json", method = RequestMethod.POST.POST)
+    public ResponseEntity file(@RequestParam MultipartFile file,
+                               @RequestParam String fileName) throws IOException {
+        String filePath = tmpDir + "/" + fileName;
+        logger.info("filePath: {}", filePath);
+        IOUtils.copy(file.getInputStream(), new FileWriter(filePath));
     }
 
     private ResponseEntity buildResponseEntity(Object body) {
