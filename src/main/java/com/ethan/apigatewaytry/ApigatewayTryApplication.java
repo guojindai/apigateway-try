@@ -9,4 +9,5 @@ public class ApigatewayTryApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApigatewayTryApplication.class, args);
 	}
+
 }

@@ -4,6 +4,7 @@ import com.ethan.apigatewaytry.dto.ResResult;
 import com.ethan.apigatewaytry.dto.SumReqBody;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
+import org.apache.catalina.util.IOTools;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -12,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,11 +55,10 @@ public class AppAuthController {
     }
 
     @RequestMapping(value = "api/file.json", method = RequestMethod.POST)
-    public ResponseEntity file(@RequestParam("file") MultipartFile file,
-                               @RequestParam String fileName) throws IOException {
+    public ResponseEntity file(@RequestParam String fileName, HttpServletRequest req) throws IOException {
         String filePath = tmpDir + "/" + fileName;
         logger.info("filePath: {}", filePath);
-        file.transferTo(new File(filePath));
+        IOUtils.copy(req.getInputStream(), new FileOutputStream(filePath));
         return buildResponseEntity(new ResResult("SUCCESS", null));
     }
 
