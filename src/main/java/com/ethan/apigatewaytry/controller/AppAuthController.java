@@ -2,18 +2,16 @@ package com.ethan.apigatewaytry.controller;
 
 import com.ethan.apigatewaytry.dto.ResResult;
 import com.ethan.apigatewaytry.dto.SumReqBody;
+import com.ethan.apigatewaytry.pf.PFData;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
-import org.apache.catalina.util.IOTools;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.Enumeration;
@@ -59,6 +57,15 @@ public class AppAuthController {
         String filePath = tmpDir + "/" + fileName;
         logger.info("filePath: {}", filePath);
         IOUtils.copy(req.getInputStream(), new FileOutputStream(filePath));
+        return buildResponseEntity(new ResResult("SUCCESS", null));
+    }
+
+    @RequestMapping(value = "api/filePf.json", method = RequestMethod.POST)
+    public ResponseEntity filePf(@RequestParam String fileName, HttpServletRequest req) throws IOException {
+        String filePath = tmpDir + "/" + fileName;
+        logger.info("filePath: {}", filePath);
+        PFData.PFFile pfFile = PFData.PFFile.parseFrom(req.getInputStream());
+        Files.write(pfFile.getFileBytes().toByteArray(), new File(filePath));
         return buildResponseEntity(new ResResult("SUCCESS", null));
     }
 

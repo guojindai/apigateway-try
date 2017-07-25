@@ -46,7 +46,7 @@ public class SignatureVerifyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         String uri = httpServletRequest.getRequestURI();
-        if ("/appauth/api/file.json".equals(uri)) {
+        if ("/appauth/api/file.json".equals(uri) || "/appauth/api/filePf.json".equals(uri)) {
             return true;
         }
         String httpMethod = httpServletRequest.getMethod();

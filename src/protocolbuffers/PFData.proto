@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package com.ethan.apigatewaytry;
+
+option java_package = "com.ethan.apigatewaytry.pf";
+option java_outer_classname = "PFData";
+
+message PFFile {
+    required bytes fileBytes = 1;
+}
